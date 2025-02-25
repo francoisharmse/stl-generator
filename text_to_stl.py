@@ -3,19 +3,20 @@ from stl import mesh
 import freetype
 import os
 
-def create_text_stl(text, output_file="output.stl", font_size=150, extrusion_depth=10, letter_spacing=50):
+def create_text_stl(text, output_file="output.stl", font_path="/System/Library/Fonts/Helvetica.ttc", font_size=150, extrusion_depth=10, letter_spacing=50):
     """
     Create an STL file from input text.
 
     Args:
         text (str): The text to convert to STL
         output_file (str): Name of the output STL file
+        font_path (str): Path to the font file (.ttf, .otf, .ttc)
         font_size (int): Size of the font
         extrusion_depth (float): Depth of the 3D extrusion
         letter_spacing (int): Additional spacing between letters in pixels
     """
-    # Load a default font (using system font)
-    face = freetype.Face("/System/Library/Fonts/Helvetica.ttc")
+    # Load the specified font
+    face = freetype.Face(font_path)
     face.set_char_size(font_size * 64)
 
     # Process each character separately
@@ -123,7 +124,41 @@ def create_text_stl(text, output_file="output.stl", font_size=150, extrusion_dep
     else:
         print("No valid characters to create mesh")
 
+def list_system_fonts():
+    """
+    List available system fonts on macOS.
+    
+    Returns:
+        dict: Dictionary mapping font names to their file paths
+    """
+    font_dirs = [
+        "/System/Library/Fonts",
+        "/Library/Fonts",
+        os.path.expanduser("~/Library/Fonts")
+    ]
+    
+    fonts = {}
+    for font_dir in font_dirs:
+        if os.path.exists(font_dir):
+            for font_file in os.listdir(font_dir):
+                if font_file.lower().endswith(('.ttf', '.otf', '.ttc')):
+                    font_path = os.path.join(font_dir, font_file)
+                    font_name = os.path.splitext(font_file)[0]
+                    fonts[font_name] = font_path
+    return fonts
+
 if __name__ == "__main__":
+    # Show available fonts
+    print("Available fonts:")
+    fonts = list_system_fonts()
+    for font_name in sorted(fonts.keys()):
+        print(f"- {font_name}")
+    
     text = input("Enter the text to convert to STL: ")
+    font_name = input("Enter font name (or press Enter for default Helvetica): ").strip()
+    font_path = fonts.get(font_name, "/System/Library/Fonts/Helvetica.ttc")
+    font_size = int(input("Enter font size (default: 150): ") or "150")
+    letter_spacing = int(input("Enter letter spacing (default: 50): ") or "50")
+    
     output_file = "text_3d.stl"
-    create_text_stl(text, output_file, font_size=150, extrusion_depth=10, letter_spacing=50)
+    create_text_stl(text, output_file, font_path=font_path, font_size=font_size, letter_spacing=letter_spacing)
