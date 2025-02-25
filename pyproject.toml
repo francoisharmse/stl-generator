@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "stl-generator"
+version = "0.1.0"
+description = "STL generator"
+authors = ["francois harmse <francois.harmse@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.13"
+numpy = "^1.26.0"
+numpy-stl = "^3.0.1"
+freetype-py = "^2.3.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0"]
+build-backend = "poetry.core.masonry.api"
