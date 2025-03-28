@@ -127,7 +127,7 @@ def create_text_stl(text, output_file="output.stl", font_path="/System/Library/F
 def list_system_fonts():
     """
     List available system fonts on macOS.
-    
+
     Returns:
         dict: Dictionary mapping font names to their file paths
     """
@@ -136,7 +136,7 @@ def list_system_fonts():
         "/Library/Fonts",
         os.path.expanduser("~/Library/Fonts")
     ]
-    
+
     fonts = {}
     for font_dir in font_dirs:
         if os.path.exists(font_dir):
@@ -153,12 +153,12 @@ if __name__ == "__main__":
     fonts = list_system_fonts()
     for font_name in sorted(fonts.keys()):
         print(f"- {font_name}")
-    
+
     text = input("Enter the text to convert to STL: ")
     font_name = input("Enter font name (or press Enter for default Helvetica): ").strip()
     font_path = fonts.get(font_name, "/System/Library/Fonts/Helvetica.ttc")
     font_size = int(input("Enter font size (default: 150): ") or "150")
     letter_spacing = int(input("Enter letter spacing (default: 50): ") or "50")
-    
+
     output_file = "text_3d.stl"
     create_text_stl(text, output_file, font_path=font_path, font_size=font_size, letter_spacing=letter_spacing)
